@@ -5,6 +5,8 @@ Created on Sun Dec 17 11:29:59 2017
 @author: Uwe
 """
 
+import pandas as pd
+
 def calculateTax(income):
     """
         calculates German income tax amount based on formulas from 
@@ -49,5 +51,14 @@ def calculateSoli(tax):
 #print("{:10.3f}".format(calculateTax(75000)), calculateSoli(calculateTax(75000)))
 #print("{:10.3f}".format(calculateTax(300000)), calculateSoli(calculateTax(300000)))
 
-for i in range(0,101000,1000):
-    print(i,':', '{:10.2f}'.format(calculateTax(i)),':','{:10.2f}'.format(calculateTaxSplit(i)))    
+#for i in range(0,101000,1000):
+#    print(i,':', '{:10.2f}'.format(calculateTax(i)),':','{:10.2f}'.format(calculateTaxSplit(i)))    
+
+
+df = pd.DataFrame({'Einkommen': range(0,101000,1000)})
+df['Steuer'] = df['Einkommen'].apply(calculateTax)
+df['SteuerSoli'] = df['Steuer'].apply(calculateSoli)
+df['Steuersplit'] = df['Einkommen'].apply(calculateTaxSplit)
+df['SteuersplitSoli'] = df['Steuersplit'].apply(calculateSoli)
+
+df.to_clipboard()
